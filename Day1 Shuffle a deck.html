@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script>
+/*============Functions============*/
+
+//	Define the struct type car
+/*
+	Num is number 1 - 13
+	Suit 
+	Mark whether it's used
+*/
+function Card(num,suit,mark){
+	this.num = num;
+	this.suit = suit;
+	this.mark = mark;
+}
+
+//	Shuffle
+function shuffle(deck){
+	document.write(".... Everyday I am SHFFULING!!! <br><br>");
+	for(var k = 0; k < 52; k++)
+	{
+		
+		var pos = parseInt((Math.random() * 10000) % 52);
+		var tempCard = deck[k];
+		deck[k] = deck[pos];
+		deck[pos] = tempCard;
+	}
+	
+}
+function suitConvert(suit){
+
+		switch(suit){
+			case 0:
+				return "Clover";
+				break;
+			case 1:
+				return "Diamond";
+				break;
+			case 2:
+				return "Heart";
+				break;
+			case 3:
+				return "Spade";
+				break;
+			default:
+				return "Invalid Suit";
+				break;
+		}
+}
+/*============Functions============*/
+//	A brand new empty deck
+	var deck = new Array(52);
+
+//	Initialization
+	for(var j = 0; j < 4 ; j++)
+	{
+		var jj = j*13;		
+		for(var i = 0; i < 13 ; i++)
+		{
+			deck[jj+i] = new Card(i+1,j,false);
+		}
+	}
+	
+	shuffle(deck);
+	
+	//	Print
+	for( var t = 0; t < 52; t++)
+	{
+		//document.write(suitConvert(deck[t].suit)+" "+deck[t].num+"<br>");
+	}
+
+
+</script>
+
+</body>
+</html>

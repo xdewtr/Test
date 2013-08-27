@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script>
+/*============Functions============*/
+
+//	Shuffle
+/*
+	Key point: parseInt will delete the floating pt
+	52.53 -> 52
+	
+	Based on this property, the biggest we can have for
+	Math.random() * 100 is 99.99
+	minus 48 
+*/
+function shuffle(deck){
+	
+	for(var k = 0; k < 52; k++)
+	{
+		//make sure pos is between 0-51
+		var randnum = parseInt(Math.random() * 100);
+		var pos = (randnum > 51) ? (randnum - 48) : randnum;		// instead of using %
+		//swap
+		var temp = deck[k];
+		deck[k] = deck[pos];
+		deck[pos] = temp;
+	}
+	
+}
+/* Functions that take care of conversion */
+function numConvert(num){
+	num &= 0xF;
+	if (num == 1)
+		return 'A';
+	else if(num == 11)
+		return 'J';
+	else if(num == 12)
+		return 'Q';
+	else if(num == 13)
+		return 'K';
+	else
+		return num;
+}
+function suitConvert(num){
+
+	num = (num >> 4)& 0xF; // two bits will be necessary
+		switch(num){
+			case 0:
+				return "Clover";
+				break;
+			case 1:
+				return "Diamond";
+				break;
+			case 2:
+				return "Heart";
+				break;
+			case 3:
+				return "Spade";
+				break;
+			default:
+				return "Invalid Suit";
+				break;
+		}
+}
+/* Add cards */
+function aRound(){
+	do{
+		document.write(playcount+" Round "+ round+" Card:"+(count+1));
+		playcount++;
+		var card = deck.pop();
+		if(numConvert(card) == 0){
+			document.write("<br> OUT OF CARD DARN IT!");
+			return;
+		}
+		//testing debug A issue
+		//var card = 33;
+		//deck.pop();
+		document.write("  You got a/an " + suitConvert(card)+" "+numConvert(card));
+		sum += checksum(card,sum);		// technically we dont need to pass in sum
+		if(sum > 21){
+			document.write(" <br> BUSTED<br>");
+			sum = 0;
+			count = 0;
+			round ++;
+			return;
+		}
+		count++;
+		document.write("  Current sum: " + sum+"<br>")
+	}while(sum < 17 && count < 5);
+	
+	sum == 21?document.write(" BJ!!!<br>"):document.write(" Congrat survivor<br>");
+	sum = 0;
+	count = 0;
+	round ++;
+}
+function checksum(card,sum){
+	card &= 0xF;
+	if(card > 9)		// case 10 J Q K A
+		return 10;
+	else if(card == 1){
+		if((sum + 11 )> 21)
+			return 1;
+		return 11;
+		}
+	else
+		return card;
+	}
+
+
+
+//	A brand new empty deck
+	var deck = new Array(52);
+	var sum = 0;		// this will measure whether we blow up or not
+	var round = 1;	
+	var count = 0;
+	var playcount = 1;
+//	Initialization
+
+/*
+	1  - 13		01 - 0d
+	17 - 29		11 - 1d
+	33 - 45		21 - 2d
+	49 - 61		31 - 3d
+*/
+	for(var j = 0; j < 4 ; j++)
+	{
+		var j13 = j*13;
+		var j16 = j*16;
+		for(var i = 0; i < 13 ; i++)
+		{
+			deck[j13+i] = j16+i+1;
+		}
+	}
+	
+	shuffle(deck);
+	while(deck.length != 0 )
+	{
+		aRound();
+	}
+	
+	
+	//	Print
+	//for( var t = 0; t < 52; t++)
+	//{
+		
+		//document.write(pos+"<br>");
+		//document.write(suitConvert(deck[t])+" "+numConvert(deck[t])+"<br>");
+	//}
+
+
+</script>
+
+</body>
+</html>

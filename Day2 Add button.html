@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script>
+
+/*============Class============*/
+//	Define the struct type car
+/*
+	Num is number 1 - 13
+	Suit 
+	Mark whether it's used
+*/
+function Card(num,suit,mark){
+	this.num = num;
+	this.suit = suit;
+	this.mark = mark;
+}
+
+//	Unit is either Player or Comp
+/*
+	This will record the current cards they hold
+	sum
+*/
+function Unit(count,sum,chold)
+{
+	this.count = count;
+	this.sum = sum;
+	this.chold = chold;
+}
+
+
+/*============Functions============*/
+//	Shuffle
+function shuffle(deck){
+	//document.write(".... Everyday I am SHFFULING!!! <br><br>");
+	
+	// using this the sections wont be replace
+	// ow if use dw it will replace the click buttom
+	//document.getElementById("demo").innerHTML=".... Everyday I am SHFFULING!!! <br><br>";
+	for(var k = 0; k < deck.length; k++)
+	{
+		
+		var pos = parseInt((Math.random() * 10000) % 52);
+		var tempCard = deck[k];
+		deck[k] = deck[pos];
+		deck[pos] = tempCard;
+	}
+	
+}
+function gamestart(){
+	shuffle(deck);
+	
+	
+	// pop two cards into the set
+	// pf stands for player first card
+	
+	var pf = deck.pop();
+	var cf = deck.pop();
+	var ps = deck.pop();
+	var cs = deck.pop();
+	
+	// Push into handcards
+	player.playerC.push(pf);
+	comp.compC.push(cf);
+	player.playerC.push(ps);
+	comp.compC.push(cs);
+	
+	// increment counts by two
+	player.count = 2;
+	comp.count = 2;
+	
+	// Call checksum to update current sum
+	checksum(player,pf);
+	
+	
+}
+// Check card 
+// since it can be both comp or player we have to know what src is 
+function checksum(srcUnit,newCard){
+	
+}
+// This function is only triggered when the player clicks more
+function moreCards(){
+
+
+}
+// This function is only triggered when the player is done taking cards
+function compTurn(){
+}
+/*============Main============*/
+//	A brand new empty deck
+	var deck = new Array(52);
+	var suit;
+
+//	Initialization
+	for(var j = 0; j < 4 ; j++)
+	{
+		switch(j){
+			case 0:
+				suit = "Clover";
+				break;
+			case 1:
+				suit = "Diamond";
+				break;
+			case 2:
+				suit = "Heart";
+				break;
+			case 3:
+				suit = "Spade";
+				break;
+			default:
+				document.write("Invalid Suit");
+				break;
+		}
+		var jj = j*13;		
+		for(var i = 0; i < 13 ; i++)
+		{
+			deck[jj+i] = new Card(i+1,suit,false);
+		}
+	}
+	
+	var playerC = new Array(5);	// five cards max
+	var compC = new Array(5);
+
+	var player = new Unit(0,0,playerC);
+	var comp = new Unit(0,0,compC);
+	
+	//	Print
+	for( var t = 0; t < 52; t++)
+	{
+		//document.write(deck[t].suit+" "+deck[t].num+"<br>");
+	}
+
+
+</script>
+<button onclick="gamestart()">Click me to start</button>
+
+
+
+<br>
+<br>
+
+
+</body>
+</html>
