@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<body>
+Start to play BlackJack.
+
+<script>
+/* BUG LOG 
+
+Player 2: | Clover 9 | Spade 2 | Message: Next Card: Diamond A BUSTED
+
+
+*/  
+/*============Self-defined var============*/
+/*
+    1  - 13     01 - 0d
+    17 - 29     11 - 1d
+    33 - 45     21 - 2d
+    49 - 61     31 - 3d
+*/
+//  Memory doesn't cost that much
+    var num = [" ","A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+    var suit = ["Clover","Diamond","Heart","Spade"];
+    var deck = [0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,
+                0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1a,0x1b,0x1c,0x1d,
+                0x21,0x22,0x23,0x24,0x25,0x26,0x27,0x28,0x29,0x2a,0x2b,0x2c,0x2d,
+                0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0x3a,0x3b,0x3c,0x3d];
+    var msg = [ "BUSTED",
+                "BlackJack",
+                "You WIN",
+                "Out of Cards"]
+    var nummask = 0x0f;
+    var suitshift = 4;
+
+    var playerCards = new Array();
+    //var numPlayer = 30;
+    var sum = 0;        // this will measure whether we blow up or not  
+    var count = 0;
+    var outofcard = 0;
+
+    var numIdx;
+    var suitIdx;
+//  Initialization
+    var numPlayer = prompt("Please enter number of player","5");
+    shuffle(deck);
+    
+    getCards();
+    
+    display();
+    
+/*============Functions============*/
+
+//  Shuffle
+/*
+    Key point: parseInt will delete the floating pt
+    52.53 -> 52
+    
+    Based on this property, the biggest we can have for
+    Math.random() * 100 is 99.99
+    minus 48 
+
+    Edited: Simply mult by 52...
+*/
+function shuffle(deck){
+    
+    for(var k = 0; k < deck.length; k++)
+    {
+        //make sure pos is between 0-51
+        var pos = parseInt(Math.random() * 52);
+        
+        //swap
+        var temp = deck[k];
+        deck[k] = deck[pos];
+        deck[pos] = temp;
+    }
+    
+}
+
+/* Add cards */
+function getCards(){
+    //starting from player one
+    for(var i = 0; i < numPlayer ; i++)
+    {
+        playerCards[i]=[];
+        // Dealing with a player at a time
+        while(1)
+        {
+            // This part is universial
+            //--------------------------------------------------------------
+            
+            var card = deck.pop();
+            var value;
+            suitIdx = card >> suitshift;
+            cardIdx = card & nummask;
+
+            if(card == 0){
+                playerCards[i].push(msg[3]);
+                outofcard = 1;
+                break;
+            }
+            //--------------------------------------------------------------
+
+            playerCards[i].push(card);
+            count++;
+            if(rule(cardIdx,count))
+                break;
+        }
+
+        condMsg(sum,playerCards[i]);
+
+        //--------------------------------------------------------------
+        // Reset (universial)
+        sum = 0;
+        count = 0;
+    }
+}
+function rule(idx,cnt){
+    /*
+        keep getting cards til sum > 17 count > 5
+        when sum > 17 judge whether it exceeds 21 print diff msg
+    */
+    if (cnt == 6){
+        return true;
+    }
+    else{
+        switch(idx){
+            case 11: 
+            case 12:
+            case 13:
+                sum += 10;
+                break;
+            case 1:
+                sum += 11;
+                if(sum > 21)
+                    sum -= 10;
+                break;
+            default:
+                sum += idx;
+        }    
+        if(sum > 17)
+            return true;
+    }
+
+    return false;
+}
+
+function condMsg(s,set){
+
+    if(s > 21){
+        set.push(msg[0]);
+    }
+    else if (s == 21)
+        set.push(msg[1]);
+    else if(s < 22 && outofcard == 0)
+        set.push(msg[2]);
+}
+
+// Printing interface
+function display(){
+    for(var i = 0; i < numPlayer ; i++){
+        document.write("<br>");
+        document.write("Player "+ i+ ": | ")
+        for(var j =0; j < playerCards[i].length - 1; j++){  
+            document.write(suit[playerCards[i][j] >> suitshift] + " " + num[playerCards[i][j]&nummask]);
+            document.write(" | ");
+        }
+        document.write("Message: " + playerCards[i][playerCards[i].length - 1]);
+    }
+}
+
+
+</script>
+
+</body>
+</html>
