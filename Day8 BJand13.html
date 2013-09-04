@@ -34,7 +34,7 @@ new Card
                         "Straight",
                         "Straight Flush",
                         "Nothing special",
-                        "Two Pairs"
+                        "Two Pairs",
                         "A Pair"];
 
     var numbuf = [0,0,0,0,0,0,0,0,0,0,0,0,0];
@@ -292,7 +292,7 @@ new Card
             {
                 return thirteenMsg[5];    
             }
-            else(numbuf[0]==2)
+            else if(numbuf[0]==2)
             {
                 return thirteenMsg[6];
             }
