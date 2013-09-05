@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html>
 <body>
-Start to play BlackJack.
 
-<script>
+
+<FORM>
+<TABLE BORDER=0 CELLPADDING=5 CELLSPACING=0 BGCOLOR="#737CA1">
+<TR><TD><FONT SIZE=4>Choose the game u want</FONT></TD></TR><TR><TD>
+<SELECT NAME="SelectMenu" onChange="jumpP(this.form)">
+
+<OPTION>
+<OPTION>BlackJack
+<OPTION>DA LAO ERRRR
+</SELECT>
+</TD></TR></TABLE>
+</FORM>
+
+<script langugae ="javascript">
+
+
+
 /* BUG LOG 
 
-Player 2: | Clover 9 | Spade 2 | Message: Next Card: Diamond A BUSTED
+NONE
 
-
-*/  
+*/
 /*============Self-defined var============*/
 /*
     1  - 13     01 - 0d
@@ -43,8 +57,10 @@ new Card
     var nummask = 0x0f;
     var suitshift = 4;
 
+
     // game should contain these following things
     // shuffle and getCards
+
     function Round(){
         // private member variable
 
@@ -94,7 +110,7 @@ new Card
             for(var i = 0; i < numPlayer ; i++){
                 playerCards[i]=[];
             // Dealing with a player at a time
-                while(1){
+                do{
             // This part is universial
             //--------------------------------------------------------------
             
@@ -112,13 +128,13 @@ new Card
             //--------------------------------------------------------------
 
                     playerCards[i].push(card); 
-                    //console.log("Line 101");
+                    console.log("Line 101");
                     //document.write(card+ "is pushed <br>");
                     
                     count++;
                     if(this.rule(cardIdx,count))
                         break;
-                }
+                }while(1);
                 console.log(playerCards[i]);
                 //document.write("stack condi: " + playerCards[i] +"<br>");
                 
@@ -149,7 +165,6 @@ new Card
             document.write("Message: " + playerCards[user][playerCards[user].length - 1]);
             }
         }
-
         // GET function
         //--------------------------------------------------------------
 
@@ -161,6 +176,7 @@ new Card
             return playerCards;
         }
     }
+
 
 
     function BlackJack(){
@@ -219,6 +235,7 @@ new Card
             keep getting cards til sum > 17 count > 5
             when sum > 17 judge whether it exceeds 21 print diff msg
         */
+
             if (cnt == 5){
                 return true;
             return false;
@@ -316,9 +333,7 @@ new Card
 
 
 
-    // Inheritances with 13 version and BJ version
 
-    //var numPlayer = 30;
     // chaning all the time
     var sum = 0;        // this will measure whether we blow up or not  
     var count = 0;
@@ -327,23 +342,13 @@ new Card
     var numIdx;
     var suitIdx;
 //  Initialization
-    var numPlayer = prompt("Please enter number of player","5");
+    var numPlayer=5;
+    var anotherGame;
 
-/*    var blackJack = new BlackJack();
-    blackJack.shuffle();
+
+
+
     
-    blackJack.getCards();
-    
-    blackJack.display();
-*/
-    var thirteen = new Thirteen();
-
-    thirteen.shuffle();
-    thirteen.getCards();
-    thirteen.display();
-
-//    var randset = [17,10,11,12,13];
-//    detection(randset);
     
 
 
@@ -374,10 +379,48 @@ function topandbotFinder(arr,t){ // t is true if we want to find top
     }
 
 }
+function jumpP(form){
+        do{
+            var i = form.SelectMenu.selectedIndex;
+            console.log(i);
+            document.open ();
+            document.close ();
+            numPlayer = prompt("Please enter number of player","10");
+
+            //if(i == 0)
+              //  return;
+            if(i == 1){ //BJ
+
+                var blackJack = new BlackJack();
+                blackJack.shuffle();
+    
+                blackJack.getCards();
+    
+                blackJack.display();
+            }
+
+            if(i == 2){ // 13
+
+                var thirteen = new Thirteen();
+
+                thirteen.shuffle();
+                thirteen.getCards();
+                thirteen.display();
+
+            }  
 
 
 
+        // ask if we still want to play
 
+            anotherGame = prompt("Do u still want to play?","yes");
+                if(anotherGame == "yes")
+                    anotherGame = true;
+                else
+                    anotherGame = false;
+            
+        }while(anotherGame);
+    }
 
 
 </script>
