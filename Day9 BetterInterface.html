@@ -72,117 +72,12 @@ new Card
     var dplay= document.getElementById("displayla");
     var ourDiv = document.getElementById("div1");
     scriptLoad("source.js");
+    scriptLoad("delay.js");
     // game should contain these following things
     // shuffle and getCards
 
 
 
-    function Thirteen(){
-        Round.apply(this, arguments);
-        this.rule = function rule(idx,cnt){
-        /*
-            keep getting cards til sum > 17 count > 5
-            when sum > 17 judge whether it exceeds 21 print diff msg
-        */
-
-            if (cnt == 5){
-                return true;
-            return false;
-            }
-        }
-
-        this.condMsg = function condMsg(s,arr){
-            for(i in arr){
-                numbuf[(arr[i]&nummask) -1]++;
-                suitbuf[arr[i]>>suitshift]++;
-            }
-            console.log(numbuf);
-            console.log(suitbuf);
-
-
-            var top = topandbotFinder(numbuf,true);
-            var bot = topandbotFinder(numbuf,false);
-
-            var diff = bot - top;   
-    
-            // still need to detect royal
-
-            /*   NOTE 
-                !numFinder(2,numbuf)&&!numFinder(3,numbuf)
-                check out 
-                41
-                32
-                311            -> no two
-                221
-                2111
-                11111          -> no two
-            */
-            if(diff >= 3 ){
-                if(diff == 4){                           // straight
-                    if(!numFinder(2,numbuf)&&!numFinder(3,numbuf)){
-                        console.log("Straight");
-                        return thirteenMsg[2];            
-                    }
-                    else if (numFinder(5,suitbuf)){
-                        console.log("Straight Flush");
-                        return thirteenMsg[3];
-                    }
-                }
-            }
-            else if (diff == 12){
-                if(numbuf[9]==1 && numbuf[10]==1 && numbuf[11]==1){
-                    if(!numFinder(2,numbuf)&&!numFinder(3,numbuf)){
-                        console.log("Straight");
-                        return thirteenMsg[2];
-                    }
-                    else if (numFinder(5,suitbuf)){
-                        console.log("Straight Flush");
-                        return thirteenMsg[3];
-                    }
-                }
-            }
-
-
-            numbuf.sort(function(a,b){return b - a});
-
-            if(numbuf[0] == 3 && numbuf[1] == 2){
-                console.log("FULLHOUSE");
-                return thirteenMsg[0];
-            }
-
-            else if(numbuf[0] == 4){
-                console.log("QUAD");
-                return thirteenMsg[1];
-            }
-
-            else if(numbuf[1]==2)
-            {
-                return thirteenMsg[5];    
-            }
-            else if(numbuf[0]==2)
-            {
-                return thirteenMsg[6];
-            }
-
-
-            console.log(numbuf);
-
-
-            // if we reach here then nothing special
-            
-            return thirteenMsg[4]; 
-
-        }
-        
-
-    }
-    //Thirteen.prototype = new Round();
-
-
-    function init(){
-        ourDiv.style.visibility='visible';
-        numPlayer = document.getElementById("txt").value;        
-    }
 
 
 
@@ -235,9 +130,10 @@ function topandbotFinder(arr,t){ // t is true if we want to find top
 function jumpP(form){
         do{
             var i = form.SelectMenu.selectedIndex;
-            var r = new Round();
+            form.SelectMenu.selectedIndex = 0;
+            numPlayer = document.getElementById("txt").value;    
             ourDiv.style.visibility='hidden';
-
+            //var r = new Round();
 
             if(i == null)
                 return;
@@ -245,30 +141,29 @@ function jumpP(form){
                 scriptLoad("bjscript.js");
                 
                 console.log(document.getElementsByTagName('HEAD'));
+
                 setTimeout(function(){
                     var blackJack = new BlackJack();
-                    blackJack.shuffle();
-    
-                    blackJack.getCards();
+                    gamestart(blackJack)},5);
                 
-                    blackJack.display();},2000);
                 
             }
 
             if(i == 2){ // 13
-
-                var thirteen = new Thirteen();
                 scriptLoad("13script.js");
-                thirteen.shuffle();
-                thirteen.getCards();
-                thirteen.display();
+                setTimeout(function(){
+                    var thirteen = new Thirteen();
+                    gamestart(thirteen)},5);
+                
+                
+                
 
             }  
 
 
 
         // ask if we still want to play
-
+            //delay(10);
             anotherGame = prompt("Do u still want to play the same game?","yes");
                 if(anotherGame == "yes")
                     anotherGame = true;
@@ -277,9 +172,17 @@ function jumpP(form){
                 }
             
         }while(anotherGame);
-        init();
+        ourDiv.style.visibility='visible';
     };
 
+
+
+
+function gamestart(game){
+    game.shuffle();
+    game.getCards();
+    game.display();
+}
 </script>
 
 </body>
