@@ -24,8 +24,8 @@
 <br>
 <div id="displayla">
 </div>
+<script src="dscript.js"></script>
 
-<script src="source.js"></script>
 
 <script langugae="javascript">
 
@@ -68,59 +68,13 @@ new Card
 
     var nummask = 0x0f;
     var suitshift = 4;
+
     var dplay= document.getElementById("displayla");
     var ourDiv = document.getElementById("div1");
-
+    scriptLoad("source.js");
     // game should contain these following things
     // shuffle and getCards
 
-    function BlackJack(){
-        Round.apply(this, arguments);               // this one is crucial
-
-        this.rule = function rule(idx,cnt){
-        /*
-            keep getting cards til sum > 17 count > 5
-            when sum > 17 judge whether it exceeds 21 print diff msg
-        */
-            if (cnt == 6){
-                return true;
-            }
-            else{
-                switch(idx){
-                    case 11: 
-                    case 12:
-                    case 13:
-                        sum += 10;
-                        break;
-                    case 1:
-                        sum += 11;
-                        if(sum > 21)
-                           sum -= 10;
-                        break;
-                    default:
-                       sum += idx;
-                }    
-                if(sum > 17)
-                    return true;
-            }
-
-            return false;
-        }
-
-        this.condMsg = function condMsg(s,arr){
-
-            if(s > 21){
-                return msg[0];
-            }
-            else if (s == 21)
-                return msg[1];
-            else if(s < 22 && outofcard == 0)
-                return msg[2];
-        }
-
-    }
-
-    BlackJack.prototype = new Round();
 
 
     function Thirteen(){
@@ -222,7 +176,7 @@ new Card
         
 
     }
-    Thirteen.prototype = new Round();
+    //Thirteen.prototype = new Round();
 
 
     function init(){
@@ -241,7 +195,6 @@ new Card
     var numIdx;
     var suitIdx;
 //  Initialization
-    var numPlayer=5;
     var anotherGame;
 
 
@@ -282,25 +235,30 @@ function topandbotFinder(arr,t){ // t is true if we want to find top
 function jumpP(form){
         do{
             var i = form.SelectMenu.selectedIndex;
-            
+            var r = new Round();
             ourDiv.style.visibility='hidden';
 
 
             if(i == null)
                 return;
             if(i == 1){ //BJ
-                var blackJack = new BlackJack();
-                blackJack.shuffle();
-    
-                blackJack.getCards();
+                scriptLoad("bjscript.js");
                 
-                blackJack.display();
+                console.log(document.getElementsByTagName('HEAD'));
+                setTimeout(function(){
+                    var blackJack = new BlackJack();
+                    blackJack.shuffle();
+    
+                    blackJack.getCards();
+                
+                    blackJack.display();},2000);
+                
             }
 
             if(i == 2){ // 13
 
                 var thirteen = new Thirteen();
-
+                scriptLoad("13script.js");
                 thirteen.shuffle();
                 thirteen.getCards();
                 thirteen.display();
